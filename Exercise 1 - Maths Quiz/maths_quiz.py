@@ -9,10 +9,13 @@ window =tk.Tk() #this creates the main window of the program
 window.title("Maths Quiz") #this sets the title at the top of the window
 window.geometry("500x400") #this controls the size of the window
 
-difficulty = "Easy" #this stores the difficulty selected by the player
+difficulty = "" #this stores the difficulty selected by the player
 
 welcome_label = tk.Label(window, text="Welcome to the Maths Quiz!") #this displays the welcome message at the top of the window
 welcome_label.pack(pady=20) #this places the welcome message inside the window
+
+number_label = tk.Label(window, text="") #this label displays the random number for the quiz 
+number_label.pack(pady=10)
 
 def randomInt(): #this function generates a random number based on the difficulty chosen
     if difficulty == "Easy":
@@ -22,11 +25,12 @@ def randomInt(): #this function generates a random number based on the difficult
     elif difficulty == "Advanced":
         return random.randint(1000,9999)
 
-
 #these buttons let the player choose the difficulty of the quiz
 def chooseEasy(): #this function runs when the player clicks Easy
     global difficulty #this is to change the variable created outside the function
     difficulty ="Easy"
+    number = randomInt() #this function calls another function, randomInt() 
+    number_label.config(text=number) #this updates the label to show the random number in the window
     print("Easy mode selected.") 
     print("Selected mode:", difficulty)
 easy_button = tk.Button(window, text="Easy", command=chooseEasy)
@@ -35,6 +39,8 @@ easy_button.pack(pady=5)
 def chooseModerate(): #this function runs when the player clicks Moderate
     global difficulty
     difficulty = "Moderate"
+    number = randomInt()
+    number_label.config(text=number)
     print("Moderate mode selected.")
     print("Selected mode:", difficulty)
 moderate_button = tk.Button(window, text="Moderate", command=chooseModerate)
@@ -43,10 +49,11 @@ moderate_button.pack(pady=5)
 def chooseAdvanced(): #this function runs when the player clicks Advanced
     global difficulty
     difficulty = "Advanced"
+    number = randomInt()
+    number_label.config(text=number)
     print("Advanced mode selected.")
     print("Selected mode:", difficulty)
 advanced_button = tk.Button(window, text="Advanced", command=chooseAdvanced)
 advanced_button.pack(pady=5)
 
-print(randomInt())
 window.mainloop() #this keeps the window open so the user can interact with it
