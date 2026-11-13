@@ -3,15 +3,25 @@ This is my Maths Quiz program where I will be using Tkinter
 to create a graphical window for the quiz.
 """
 import tkinter as tk
+import random # this is to use python's random number tools
 
 window =tk.Tk() #this creates the main window of the program
 window.title("Maths Quiz") #this sets the title at the top of the window
 window.geometry("500x400") #this controls the size of the window
 
-difficulty = "" #this stores the difficulty selected by the player
+difficulty = "Easy" #this stores the difficulty selected by the player
 
 welcome_label = tk.Label(window, text="Welcome to the Maths Quiz!") #this displays the welcome message at the top of the window
 welcome_label.pack(pady=20) #this places the welcome message inside the window
+
+def randomInt(): #this function generates a random number based on the difficulty chosen
+    if difficulty == "Easy":
+        return random.randint(1,9)
+    elif difficulty == "Moderate":
+        return random.randint(10,99)
+    elif difficulty == "Advanced":
+        return random.randint(1000,9999)
+
 
 #these buttons let the player choose the difficulty of the quiz
 def chooseEasy(): #this function runs when the player clicks Easy
@@ -38,4 +48,5 @@ def chooseAdvanced(): #this function runs when the player clicks Advanced
 advanced_button = tk.Button(window, text="Advanced", command=chooseAdvanced)
 advanced_button.pack(pady=5)
 
+print(randomInt())
 window.mainloop() #this keeps the window open so the user can interact with it
