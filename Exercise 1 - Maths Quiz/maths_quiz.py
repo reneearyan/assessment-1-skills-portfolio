@@ -79,8 +79,17 @@ def decideOperation(): #this function randomly chooses addition or subtraction
 def displayProblem():
     global correct_answer
     global attempts
+    global question_count
 
+    if question_count== 10:
+        displayResults() 
+        return
+
+    question_count += 1
     attempts = 0
+
+    answer_entry.delete(0,tk.END) #this clears the previous answer
+    submit.button.config(state="normal") #this enables the submit button again
 
     number = randomInt()
     number2 = randomInt()
@@ -91,8 +100,9 @@ def displayProblem():
     else:
         correct_answer = number - number2
         
-    question = f"{number} {operation} {number2} = ?"
+    question = f"Question {question_count}/10: {number} {operation} {number2} = ?"
     number_label.config(text=question)
+    feedback_label.config(text="" )
 
 #these buttons let the player choose the difficulty of the quiz
 def chooseEasy(): #this function runs when the player clicks Easy
