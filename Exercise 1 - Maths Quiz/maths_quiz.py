@@ -36,7 +36,7 @@ def getAnswer(): #this function retrieves the answer by the player
     
     player_answer = answer_entry.get()
 
-    if player_answer.isdigit(): #this checks whether the input contains digits
+    if player_answer.lstrip("-").isdigit(): #this allows whole numbers with or without a negative sign
         player_answer = int(player_answer) #this converts the text into a whole number
         attempts+= 1 #increases the cunter by one for each valid answer
         
@@ -76,6 +76,38 @@ def decideOperation(): #this function randomly chooses addition or subtraction
     operation = random.choice(["+", "-"])
     return operation
 
+
+def displayResults(): #this checks the score range and assign the correct grade
+    number_label.config(text="Quiz Completed!")
+    feedback_label.config(text=f"Your final score is {score}/100")
+
+    if score > 90: 
+        grade = "A+"
+    elif score >= 80:
+        grade = "A"
+    elif score >= 70:
+        grade = "B"
+    elif score >= 60:
+        grade = "C"
+    elif score >= 50:
+        grade = "D"
+    else:
+        grade = "F"
+
+    feedback_label.config(text=f"Your final score is {score}/100. Your grade is {grade}.")
+
+def replay():
+    global score
+    global question_count
+
+    score = 0 #this resets the player's score
+    question_count = 0 #this resets the question counter
+
+    answer_entry.delete(0, tk.END) #this clears the answer box
+    feedback_label.config(text="Choose a difficulty to play again.")
+    number_label.config(text="Welcome back!")
+    submit_button.config(state="normal")
+
 def displayProblem():
     global correct_answer
     global attempts
@@ -89,7 +121,7 @@ def displayProblem():
     attempts = 0
 
     answer_entry.delete(0,tk.END) #this clears the previous answer
-    submit.button.config(state="normal") #this enables the submit button again
+    submit_button.config(state="normal") #this enables the submit button again
 
     number = randomInt()
     number2 = randomInt()
@@ -146,5 +178,8 @@ def chooseAdvanced(): #this function runs when the player clicks Advanced
     print("Selected mode:", difficulty)
 advanced_button = tk.Button(window, text="Advanced", command=chooseAdvanced)
 advanced_button.pack(pady=5)
+
+replay_button = tk.Button(window, text="Play Again", command = replay) #this creates a button to restart the quiz
+replay_button.pack(pady=5)
 
 window.mainloop() #this keeps the window open so the user can interact with it
