@@ -31,6 +31,9 @@ feedback_label.pack(pady=5)
 answer_entry = tk.Entry(window) #this creates a box where the player can type their answer
 answer_entry.pack(pady=10)
 
+def isCorrect(player_answer): #this checks if the player's answers matches the correct answer
+    return player_answer == correct_answer
+
 def getAnswer(): #this function retrieves the answer by the player 
     global attempts, score #this updates the counter and score created outside the function
     
@@ -40,7 +43,7 @@ def getAnswer(): #this function retrieves the answer by the player
         player_answer = int(player_answer) #this converts the text into a whole number
         attempts+= 1 #increases the cunter by one for each valid answer
         
-        if player_answer == correct_answer:
+        if isCorrect(player_answer): #this checks the answer using the isCorrect function
             if attempts == 1: 
                 score += 10 #this adds 10 points to the score
                 feedback_label.config(text="Correct! You earned 10 points!")
@@ -97,12 +100,12 @@ def displayResults(): #this checks the score range and assign the correct grade
     feedback_label.config(text=f"Your final score is {score}/100. Your grade is {grade}.")
 
 def replay():
-    global score
-    global question_count
+    global score, question_count, difficulty 
 
     score = 0 #this resets the player's score
     question_count = 0 #this resets the question counter
-
+    difficulty = ""
+    
     answer_entry.delete(0, tk.END) #this clears the answer box
     feedback_label.config(text="Choose a difficulty to play again.")
     number_label.config(text="Welcome back!")
@@ -136,46 +139,55 @@ def displayProblem():
     number_label.config(text=question)
     feedback_label.config(text="" )
 
+def displayMenu(): #this displays the instructions for choosing a quiz difficulty
+    menu_label = tk.Label(window, text="Choose your difficulty:")
+    menu_label.pack(pady=10)
+
 #these buttons let the player choose the difficulty of the quiz
 def chooseEasy(): #this function runs when the player clicks Easy
-    global difficulty #this is to change the variable created outside the function
-    difficulty ="Easy"
-    global correct_answer
-    global attempts
-    attempts = 0
+    global difficulty, score, question_count
+
+    difficulty = "Easy"
+    score = 0
+    question_count = 0
 
     displayProblem() #this generates and displays a new question
 
     print("Easy mode selected.") 
     print("Selected mode:", difficulty)
-easy_button = tk.Button(window, text="Easy", command=chooseEasy)
-easy_button.pack(pady=5)
 
 def chooseModerate(): #this function runs when the player clicks Moderate
-    global difficulty
+    global difficulty, score, question_count
+    
     difficulty = "Moderate"
-    global correct_answer
-    global attempts
-    attempts = 0
+    score = 0
+    question_count = 0
 
     displayProblem()
 
     print("Moderate mode selected.")
     print("Selected mode:", difficulty)
-moderate_button = tk.Button(window, text="Moderate", command=chooseModerate)
-moderate_button.pack(pady=5)
 
 def chooseAdvanced(): #this function runs when the player clicks Advanced
-    global difficulty
+    global difficulty, score, question_count
+    
     difficulty = "Advanced"
-    global correct_answer
-    global attempts
-    attempts = 0
+    score = 0
+    question_count = 0
 
     displayProblem() 
 
     print("Advanced mode selected.")
     print("Selected mode:", difficulty)
+
+displayMenu()
+
+easy_button = tk.Button(window, text="Easy", command=chooseEasy)
+easy_button.pack(pady=5)
+
+moderate_button = tk.Button(window, text="Moderate", command=chooseModerate)
+moderate_button.pack(pady=5)
+
 advanced_button = tk.Button(window, text="Advanced", command=chooseAdvanced)
 advanced_button.pack(pady=5)
 
