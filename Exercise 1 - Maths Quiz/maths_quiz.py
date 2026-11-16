@@ -13,6 +13,8 @@ difficulty = "" #this stores the difficulty selected by the player
 
 correct_answer = 0 #this creates a variable that will store the correct answer for the next question
 
+attempts = 0 #this will count the player's attempts
+
 welcome_label = tk.Label(window, text="Welcome to the Maths Quiz!") #this displays the welcome message at the top of the window
 welcome_label.pack(pady=20) #this places the welcome message inside the window
 
@@ -23,14 +25,23 @@ answer_entry = tk.Entry(window) #this creates a box where the player can type th
 answer_entry.pack(pady=10)
 
 def getAnswer(): #this function retrieves the answer by the player 
+    global attempts #this updates the counter created outside the function
+    
     player_answer = answer_entry.get()
 
     if player_answer.isdigit(): #this checks whether the input contains digits
         player_answer = int(player_answer) #this converts the text into a whole number
+        attempts+= 1 #increases the cunter by one for each valid answer
+        
         if player_answer == correct_answer:
             print("Correct! Good job!")
+            attempts = 2
+        elif attempts == 1:
+            print("Sorry, please try again. You have one more attempt.")
         else:
-            print("Sorry, please try again.")
+            print("Sorry, both attempts were incorrect.")
+            print("The correct answer was:", correct_answer)
+            displayProblem()
     else:
         print("Please enter a valid whole number.")
 
@@ -51,37 +62,11 @@ def decideOperation(): #this function randomly chooses addition or subtraction
     operation = random.choice(["+", "-"])
     return operation
 
-#these buttons let the player choose the difficulty of the quiz
-def chooseEasy(): #this function runs when the player clicks Easy
-    global difficulty #this is to change the variable created outside the function
-    difficulty ="Easy"
+def displayProblem():
     global correct_answer
+    global attempts
 
-    number = randomInt() #this function calls another function, randomInt() 
-    number2 = randomInt() #this generates a second number for the question
-    operation = decideOperation()
-
-    if operation == "+": 
-        correct_answer = number + number2
-    else:
-        correct_answer = number - number2
-    
-    question = f"{number} {operation} {number2} = ?"
-    number_label.config(text=question) #this updates the label to show the question in the window
-
-    print("First number:", number)
-    print("Second number:", number2)
-    print("Maths question:", question)
-    print("Selected operation:", operation) #this randomly selects an operation for the math question
-    print("Easy mode selected.") 
-    print("Selected mode:", difficulty)
-easy_button = tk.Button(window, text="Easy", command=chooseEasy)
-easy_button.pack(pady=5)
-
-def chooseModerate(): #this function runs when the player clicks Moderate
-    global difficulty
-    difficulty = "Moderate"
-    global correct_answer
+    attempts = 0
 
     number = randomInt()
     number2 = randomInt()
@@ -94,11 +79,31 @@ def chooseModerate(): #this function runs when the player clicks Moderate
         
     question = f"{number} {operation} {number2} = ?"
     number_label.config(text=question)
-    
-    print("First number:", number)
-    print("Second number:", number2)
-    print("Maths question:", question)
-    print("Selected operation:", operation)
+
+#these buttons let the player choose the difficulty of the quiz
+def chooseEasy(): #this function runs when the player clicks Easy
+    global difficulty #this is to change the variable created outside the function
+    difficulty ="Easy"
+    global correct_answer
+    global attempts
+    attempts = 0
+
+    displayProblem() #this generates and displays a new question
+
+    print("Easy mode selected.") 
+    print("Selected mode:", difficulty)
+easy_button = tk.Button(window, text="Easy", command=chooseEasy)
+easy_button.pack(pady=5)
+
+def chooseModerate(): #this function runs when the player clicks Moderate
+    global difficulty
+    difficulty = "Moderate"
+    global correct_answer
+    global attempts
+    attempts = 0
+
+    displayProblem()
+
     print("Moderate mode selected.")
     print("Selected mode:", difficulty)
 moderate_button = tk.Button(window, text="Moderate", command=chooseModerate)
@@ -108,23 +113,11 @@ def chooseAdvanced(): #this function runs when the player clicks Advanced
     global difficulty
     difficulty = "Advanced"
     global correct_answer
+    global attempts
+    attempts = 0
 
-    number = randomInt()
-    number2 = randomInt()
-    operation = decideOperation()
-
-    if operation =="+":
-        correct_answer = number + number2
-    else:
-        correct_answer = number - number2
+    displayProblem() 
     
-    question = f"{number} {operation} {number2} = ?"
-    number_label.config(text=question)
-
-    print("First number:", number)
-    print("Second number:", number2)
-    print("Maths question:", question)
-    print("Selected operation:", operation)
     print("Advanced mode selected.")
     print("Selected mode:", difficulty)
 advanced_button = tk.Button(window, text="Advanced", command=chooseAdvanced)
