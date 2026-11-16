@@ -25,12 +25,26 @@ def randomInt(): #this function generates a random number based on the difficult
     elif difficulty == "Advanced":
         return random.randint(1000,9999)
 
+def decideOperation(): #this function randomly chooses addition or subtraction
+    operation = random.choice(["+", "-"])
+    return operation
+
 #these buttons let the player choose the difficulty of the quiz
 def chooseEasy(): #this function runs when the player clicks Easy
     global difficulty #this is to change the variable created outside the function
     difficulty ="Easy"
+
     number = randomInt() #this function calls another function, randomInt() 
-    number_label.config(text=number) #this updates the label to show the random number in the window
+    number2 = randomInt() #this generates a second number for the question
+    operation = decideOperation()
+    
+    question = f"{number} {operation} {number2} = ?"
+    number_label.config(text=question) #this updates the label to show the question in the window
+
+    print("First number:", number)
+    print("Second number:", number2)
+    print("Maths question:", question)
+    print("Selected operation:", operation) #this randomly selects an operation for the math question
     print("Easy mode selected.") 
     print("Selected mode:", difficulty)
 easy_button = tk.Button(window, text="Easy", command=chooseEasy)
@@ -39,8 +53,18 @@ easy_button.pack(pady=5)
 def chooseModerate(): #this function runs when the player clicks Moderate
     global difficulty
     difficulty = "Moderate"
+
     number = randomInt()
-    number_label.config(text=number)
+    number2 = randomInt()
+    operation = decideOperation()
+        
+    question = f"{number} {operation} {number2} = ?"
+    number_label.config(text=question)
+    
+    print("First number:", number)
+    print("Second number:", number2)
+    print("Maths question:", question)
+    print("Selected operation:", operation)
     print("Moderate mode selected.")
     print("Selected mode:", difficulty)
 moderate_button = tk.Button(window, text="Moderate", command=chooseModerate)
@@ -49,8 +73,18 @@ moderate_button.pack(pady=5)
 def chooseAdvanced(): #this function runs when the player clicks Advanced
     global difficulty
     difficulty = "Advanced"
+
     number = randomInt()
-    number_label.config(text=number)
+    number2 = randomInt()
+    operation = decideOperation()
+    
+    question = f"{number} {operation} {number2} = ?"
+    number_label.config(text=question)
+
+    print("First number:", number)
+    print("Second number:", number2)
+    print("Maths question:", question)
+    print("Selected operation:", operation)
     print("Advanced mode selected.")
     print("Selected mode:", difficulty)
 advanced_button = tk.Button(window, text="Advanced", command=chooseAdvanced)
