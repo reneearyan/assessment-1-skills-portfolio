@@ -15,17 +15,24 @@ correct_answer = 0 #this creates a variable that will store the correct answer f
 
 attempts = 0 #this will count the player's attempts
 
+score = 0 #this keeps track of the player's points
+
+question_count = 0 #this counts how many questions the player has answered 
+
 welcome_label = tk.Label(window, text="Welcome to the Maths Quiz!") #this displays the welcome message at the top of the window
 welcome_label.pack(pady=20) #this places the welcome message inside the window
 
 number_label = tk.Label(window, text="") #this label displays the random number for the quiz 
 number_label.pack(pady=10)
 
+feedback_label = tk.Label(window, text="")
+feedback_label.pack(pady=5)
+
 answer_entry = tk.Entry(window) #this creates a box where the player can type their answer
 answer_entry.pack(pady=10)
 
 def getAnswer(): #this function retrieves the answer by the player 
-    global attempts #this updates the counter created outside the function
+    global attempts, score #this updates the counter and score created outside the function
     
     player_answer = answer_entry.get()
 
@@ -34,16 +41,23 @@ def getAnswer(): #this function retrieves the answer by the player
         attempts+= 1 #increases the cunter by one for each valid answer
         
         if player_answer == correct_answer:
-            print("Correct! Good job!")
-            attempts = 2
+            if attempts == 1: 
+                score += 10 #this adds 10 points to the score
+                feedback_label.config(text="Correct! You earned 10 points!")
+            else:
+                score += 5
+                feedback_label.config(text="Correct! You earned 5 points.")
+
+            submit_button.config(state="disabled") #this stops the player from submitting another answer
+            window.after(1000, displayProblem) #this waits for 1 second before running the next section
         elif attempts == 1:
-            print("Sorry, please try again. You have one more attempt.")
+            feedback_label.config(text="Sorry, please try again. You have one more attempt left.")
         else:
-            print("Sorry, both attempts were incorrect.")
-            print("The correct answer was:", correct_answer)
-            displayProblem()
+            feedback_label.config(text=f"Sorry, both attempts were incorrect. The correct answer was: {correct_answer}")
+            submit_button.config(state="disabled")
+            window.after(1500, displayProblem)
     else:
-        print("Please enter a valid whole number.")
+        feedback_label.config(text="Please enter a valid whole number.")
 
     print("Your answer:", player_answer)
 
@@ -117,7 +131,7 @@ def chooseAdvanced(): #this function runs when the player clicks Advanced
     attempts = 0
 
     displayProblem() 
-    
+
     print("Advanced mode selected.")
     print("Selected mode:", difficulty)
 advanced_button = tk.Button(window, text="Advanced", command=chooseAdvanced)
