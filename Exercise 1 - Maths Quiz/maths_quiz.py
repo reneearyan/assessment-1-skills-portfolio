@@ -19,6 +19,8 @@ score = 0 #this keeps track of the player's points
 
 question_count = 0 #this counts how many questions the player has answered 
 
+lives = 3 #this variable keeps track of the player's lives
+
 welcome_label = tk.Label(window, text="Welcome to the Maths Quiz!") #this displays the welcome message at the top of the window
 welcome_label.pack(pady=20) #this places the welcome message inside the window
 
@@ -28,6 +30,9 @@ number_label.pack(pady=10)
 feedback_label = tk.Label(window, text="")
 feedback_label.pack(pady=5)
 
+hearts_label = tk.Label(window, text="Lives: " + "❤️" * lives) #this displays the player's lives as hearts
+hearts_label.pack(pady=5)
+
 answer_entry = tk.Entry(window) #this creates a box where the player can type their answer
 answer_entry.pack(pady=10)
 
@@ -35,7 +40,7 @@ def isCorrect(player_answer): #this checks if the player's answers matches the c
     return player_answer == correct_answer
 
 def getAnswer(): #this function retrieves the answer by the player 
-    global attempts, score #this updates the counter and score created outside the function
+    global attempts, score, lives #this updates the counter, score, and lives created outside the function
     
     player_answer = answer_entry.get()
 
@@ -56,15 +61,22 @@ def getAnswer(): #this function retrieves the answer by the player
         elif attempts == 1:
             feedback_label.config(text="Sorry, please try again. You have one more attempt left.")
         else:
+            lives -= 1 #this decreases the player's lives by 1
+            hearts_label.config(text="Lives: " + "❤️" * lives) #this updates the hearts label to show the new number of lives
+            
             feedback_label.config(text=f"Sorry, both attempts were incorrect. The correct answer was: {correct_answer}")
             submit_button.config(state="disabled")
-            window.after(1500, displayProblem)
+
+            if lives ==0: #this checks if the player has run out of lives
+                window.after(1500, displayResults)
+            else:
+                window.after(1500, displayProblem) 
     else:
         feedback_label.config(text="Please enter a valid whole number.")
 
     print("Your answer:", player_answer)
 
-submit_button = tk.Button(window, text="Submit Answer", command = getAnswer) #this button allows the player to submit their answer and calls getAnswer() when the player clicks it
+submit_button = tk.Button(window, text="Submit Answer", command = getAnswer, state="disabled") #this creates a button that will run the getAnswer function when clicked
 submit_button.pack(pady=10)
 
 def randomInt(): #this function generates a random number based on the difficulty chosen
@@ -81,7 +93,11 @@ def decideOperation(): #this function randomly chooses addition or subtraction
 
 
 def displayResults(): #this checks the score range and assign the correct grade
-    number_label.config(text="Quiz Completed!")
+    if lives == 0:
+        number_label.config(text="Game Over! You have run out of lives.")
+    else:
+        number_label.config(text="Quiz Completed!")
+    
     feedback_label.config(text=f"Your final score is {score}/100")
 
     if score > 90: 
@@ -98,18 +114,24 @@ def displayResults(): #this checks the score range and assign the correct grade
         grade = "F"
 
     feedback_label.config(text=f"Your final score is {score}/100. Your grade is {grade}.")
+    submit_button.config(state="disabled") #this disables the submit button so the player cannot submit any more answers
+    window.after(3000, replay) #this waits for 3 seconds before running the replay function
 
 def replay():
-    global score, question_count, difficulty 
+    global score, question_count, difficulty,lives
 
     score = 0 #this resets the player's score
     question_count = 0 #this resets the question counter
     difficulty = ""
+    lives = 3 #this resets the player's lives
+    hearts_label.config(text="Lives: " + "❤️" * lives) #this updates the hearts label to show the new number of lives
     
     answer_entry.delete(0, tk.END) #this clears the answer box
     feedback_label.config(text="Choose a difficulty to play again.")
     number_label.config(text="Welcome back!")
-    submit_button.config(state="normal")
+    submit_button.config(state="disabled")
+
+submit_button.config(state="disabled") #this disables the submit button so the player cannot submit any more answers
 
 def displayProblem():
     global correct_answer
@@ -145,11 +167,14 @@ def displayMenu(): #this displays the instructions for choosing a quiz difficult
 
 #these buttons let the player choose the difficulty of the quiz
 def chooseEasy(): #this function runs when the player clicks Easy
-    global difficulty, score, question_count
+    global difficulty, score, question_count, lives
 
     difficulty = "Easy"
     score = 0
     question_count = 0
+    lives = 3
+    hearts_label.config(text="Lives: " + "❤️" * lives) #this updates the hearts label to show the new number of lives
+
 
     displayProblem() #this generates and displays a new question
 
@@ -157,11 +182,13 @@ def chooseEasy(): #this function runs when the player clicks Easy
     print("Selected mode:", difficulty)
 
 def chooseModerate(): #this function runs when the player clicks Moderate
-    global difficulty, score, question_count
+    global difficulty, score, question_count, lives
     
     difficulty = "Moderate"
     score = 0
     question_count = 0
+    lives = 3
+    hearts_label.config(text="Lives: " + "❤️" * lives)
 
     displayProblem()
 
@@ -169,12 +196,14 @@ def chooseModerate(): #this function runs when the player clicks Moderate
     print("Selected mode:", difficulty)
 
 def chooseAdvanced(): #this function runs when the player clicks Advanced
-    global difficulty, score, question_count
+    global difficulty, score, question_count, lives
     
     difficulty = "Advanced"
     score = 0
     question_count = 0
-
+    lives = 3
+    hearts_label.config(text="Lives: " + "❤️" * lives)
+    
     displayProblem() 
 
     print("Advanced mode selected.")
