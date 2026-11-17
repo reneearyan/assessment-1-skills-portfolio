@@ -3,7 +3,8 @@ This is my Maths Quiz program where I will be using Tkinter
 to create a graphical window for the quiz.
 """
 import tkinter as tk
-import random # this is to use python's random number tools
+import random
+from tkinter import messagebox # this is to use python's random number tools
 
 window =tk.Tk() #this creates the main window of the program
 window.title("Maths Quiz") #this sets the title at the top of the window
@@ -115,7 +116,15 @@ def displayResults(): #this checks the score range and assign the correct grade
 
     feedback_label.config(text=f"Your final score is {score}/100. Your grade is {grade}.")
     submit_button.config(state="disabled") #this disables the submit button so the player cannot submit any more answers
-    window.after(3000, replay) #this waits for 3 seconds before running the replay function
+
+    window.after(100, askReplay)
+
+def askReplay():
+    play_again = messagebox.askyesno("Play Again?", "Do you want to play again?")
+    if play_again:
+        replay()
+    else:
+        window.destroy()
 
 def replay():
     global score, question_count, difficulty,lives
@@ -203,7 +212,7 @@ def chooseAdvanced(): #this function runs when the player clicks Advanced
     question_count = 0
     lives = 3
     hearts_label.config(text="Lives: " + "❤️" * lives)
-    
+
     displayProblem() 
 
     print("Advanced mode selected.")
