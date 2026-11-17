@@ -4,7 +4,7 @@ to create a graphical window for the quiz.
 """
 import tkinter as tk
 import random
-from tkinter import messagebox # this is to use python's random number tools
+from tkinter import messagebox 
 
 window =tk.Tk() #this creates the main window of the program
 window.title("Maths Quiz") #this sets the title at the top of the window
