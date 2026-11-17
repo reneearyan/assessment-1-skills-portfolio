@@ -22,7 +22,8 @@ def showPunchline(): #this displays the punchline of the joke
 def quitApp(): #this closes the application
     window.destroy()
 
-window = tk.Tk() #this creates the main application window
+#this creates the main application window
+window = tk.Tk() 
 window.title("Joke Assistant")
 window.geometry("400x200")
 window.config(bg="lightblue")
@@ -38,3 +39,23 @@ joke_label.pack(pady=15)
 #this creates the label where the punchline will appear
 punchline_label = tk.Label(window, text="", font=("Arial", 12, "italic"),bg="lightblue",wraplength=400)
 punchline_label.pack(pady=10)
+
+#this creates the button that displays a random joke
+joke_button = tk.Button(window, text="Alexa tell me a Joke", command=randomJoke)
+joke_button.pack(pady=5)
+
+#this creates the button that displays the punchline
+punchline_button = tk.Button(window, text="Show Punchline", command=showPunchline)
+punchline_button.pack(pady=8)
+
+#this creates the button to get another random joke
+next_button = tk.Button(window, text="Next Joke", command=randomJoke)
+next_button.pack(pady=5)
+
+#this creates the button to quit the application
+quit_button = tk.Button(window,text="Quit", command=quitApp)
+quit_button.pack(pady=8)
+
+current_punchline = "" #this stores the punchline before a joke is selected
+
+window.mainloop() #this keeps the application window running
